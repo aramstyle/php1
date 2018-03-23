@@ -1,31 +1,5 @@
 <?php
-function print_title(){
-  if(isset($_GET['id'])){
-    echo $_GET['id'];
-  }
-  else {
-    echo "Welcome";
-  }
-}
-
-function print_description() {
-  if(isset($_GET['id'])) {
-    echo file_get_contents("data/".$_GET['id']);
-  }
-  else {
-    echo "Hello~!!";
-  }
-}
-
-function print_list() {
-  $list = scandir('./data');
-  //$list = array_diff($list, [".",".."]);
-  for($i=0;$i<count($list);$i++) {
-    if($list[$i] == '.') continue;
-    if($list[$i] == '..') continue;
-    echo "<li><a href=\"index.php?id=$list[$i]\">$list[$i]</a></li>\n";
-  }
-}
+require_once('lib/print.php');
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +13,16 @@ function print_list() {
     <ol>
       <?php print_list(); ?>
     </ol>
+
     <a href="create.php">Create</a>
+    <?php if(isset($_GET['id'])) { ?>
+      <a href="update.php?id=<?php echo $_GET['id']; ?>">Update</a>
+      <form action="delete_process.php" method="post">
+        <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+        <input type="submit" value="delete">
+      </form>
+    <?php } ?>
+
     <h2>
       <?php print_title(); ?>
     </h2>
